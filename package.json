@@ -1,6 +1,6 @@
 {
   "name": "serialize-ansible-tasks-output",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "This serializes the ansible log output tasks into an array",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
