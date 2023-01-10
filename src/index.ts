@@ -19,15 +19,28 @@ function serializeTasksOutputs(
       const endIndexOfResult =
         task.substring(startIndexOfResult).indexOf(": ") + startIndexOfResult;
 
-      const result = task
+      let result = task
         .substring(startIndexOfResult, endIndexOfResult)
         .replace("*", "nothing")
         .trim();
 
+      const isError = !safeResults.some((p) => p === result);
+
+      if (isError) {
+        const playRecapIndex = task.toUpperCase().indexOf("PLAY RECAP");
+
+        result = task
+          .substring(
+            startIndexOfResult,
+            playRecapIndex != -1 ? playRecapIndex : undefined,
+          )
+          .trim();
+      }
+
       return {
         taskName,
         result,
-        isError: !safeResults.some((p) => p === result),
+        isError,
       };
     });
 
