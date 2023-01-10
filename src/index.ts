@@ -1,8 +1,6 @@
-import fs from "fs";
-
 function serializeTasksOutputs(
   ansibleOutputLog: string,
-  safeResults = ["ok", "included", "nothing", "skipping"],
+  safeResults = ["ok", "included", "changed", "nothing", "skipping"],
 ) {
   const tasks = ansibleOutputLog
     .replace(/(\n|\\n)/gi, "")
@@ -12,7 +10,11 @@ function serializeTasksOutputs(
     .map((task) => {
       const taskName = task.substring(1, task.indexOf("]"));
 
-      const startIndexOfResult = task.lastIndexOf("*") + 1;
+      let startIndexOfResult = task.indexOf("*");
+
+      while (task.at(startIndexOfResult) === "*") {
+        startIndexOfResult++;
+      }
 
       const endIndexOfResult =
         task.substring(startIndexOfResult).indexOf(": ") + startIndexOfResult;
